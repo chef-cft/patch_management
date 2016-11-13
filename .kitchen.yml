@@ -9,11 +9,46 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
   - name: centos-7.2
+  - name: windows-2012r2
+    driver:
+      box: opentable/win-2012r2-standard-amd64-nocm
 
 suites:
-  - name: default
+  - name: repo
+    excludes: windows-2012r2
+    run_list:
+      - recipe[patch_management::repo_server]
+    driver:
+      network:
+        - ['private_network', {ip: '192.168.254.71'}]
+  - name: wsus
+    excludes: centos-7.2
+    run_list:
+      - recipe[patch_management::wsus_server]
+    driver:
+      network:
+        - ['private_network', {ip: '192.168.254.72'}]
+      customize:
+        memory: 4096
+        cpus: 2
+  - name: centos
+    excludes: windows-2012r2
     run_list:
       - recipe[patch_management::default]
     attributes:
+      patch:
+        version: '2016-11-12'
+    verifier:
+      inspec_tests:
+        - https://github.com/dev-sec/linux-patch-benchmark
+  - name: windows
+    excludes: centos-7.2
+    run_list:
+      - recipe[patch_management::default]
+    attributes:
+      patch:
+        version: '2016-11-12'
+    verifier:
+      inspec_tests:
+        - https://github.com/dev-sec/windows-patch-benchmark

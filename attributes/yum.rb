@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: patch_management
-# Recipe:: default
+# Attributes:: yum
 #
 # Copyright 2016 Chef Software, Inc
 #
@@ -16,5 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe 'patch_management::_redhat' if platform_family?('rhel')
-include_recipe 'patch_management::_windows' if platform_family?('windows')
+default['yum']['repos']['centos-base'] = 'http://mirror.centos.org/centos/7/os/x86_64'
+default['yum']['repos']['centos-updates'] = 'http://mirror.centos.org/centos/7/updates/x86_64'
+default['yum']['combined'] = false

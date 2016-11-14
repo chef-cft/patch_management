@@ -17,9 +17,11 @@
 # limitations under the License.
 
 powershell_script 'Configure Shell Memory' do
+  action :nothing
   code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
-end
+end.run_action(:run)
 
+node.default['wsus_server']['subscription']['configure_timeout'] = 3600
 node.default['wsus_server']['freeze']['name'] = Date.today.strftime('%Y-%m-%d')
 node.default['wsus_server']['subscription']['categories'] = [
   'Windows Server 2012 R2'

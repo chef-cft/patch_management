@@ -1,0 +1,22 @@
+# apt-mirror configuration file
+##
+## The default configuration options (uncomment and change to override)
+##
+#
+
+set base_path /var/repo_mirror
+set nthreads 20
+
+# 16.04 "xenial" amd64 mirror
+
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-proposed main restricted universe multiverse
+deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial main/debian-installer restricted/debian-installer universe/debian-installer multiverse/debian-installer
+deb-amd64 http://packages.medibuntu.org/ xenial free non-free
+
+# Cleaning section
+clean http://vn.archive.ubuntu.com/
+clean http://packages.medibuntu.org/

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: patch_management
-# Attributes:: yum
+# Recipe:: apt_repo
 #
 # Copyright 2016 Chef Software, Inc
 #
@@ -16,8 +16,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default['yum']['repos']['centos-base'] = 'http://mirror.centos.org/centos/7/os/x86_64'
-default['yum']['repos']['centos-updates'] = 'http://mirror.centos.org/centos/7/updates/x86_64'
-default['yum']['combined'] = false
+return unless platform_family?('debian')
 
-default['yum']['local_server'] = 'my-yum-repo-server.example.com'
+package 'apt-mirror'
+package 'apache2'
+
+template '/etc/apt/mirror.list' do
+  source 'mirror.list.erb'
+  action :create
+end
+
+directory '/var/repo_mirror' do
+  owner 'www-data'
+  action :create
+end
+
+execute 'Sync Mirror' do
+  command 'apt-mirror'
+  action :run
+end
+
+# Create Symlink for apache to serve the mirror dir
+
+# Make sure apache can follow the symlinks
+
+# Edit /etc/cron.d/apt-mirror to schedule automated sync's

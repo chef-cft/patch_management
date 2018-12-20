@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: patch_management
-# Attributes:: yum
+# Recipe:: ubuntu_client
 #
 # Copyright 2016 Chef Software, Inc
 #
@@ -16,8 +16,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default['yum']['repos']['centos-base'] = 'http://mirror.centos.org/centos/7/os/x86_64'
-default['yum']['repos']['centos-updates'] = 'http://mirror.centos.org/centos/7/updates/x86_64'
-default['yum']['combined'] = false
-
-default['yum']['local_server'] = 'my-yum-repo-server.example.com'
+return unless platform_family?('debian')

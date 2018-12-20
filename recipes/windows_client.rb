@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: patch_management
-# Recipe:: repo_server
+# Recipe:: windows_client
 #
 # Copyright 2016 Chef Software, Inc
 #
@@ -16,32 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO: Look into replacing pakrat with native functionality.
+return unless platform_family?('windows')
 
-package 'createrepo'
-package 'python-setuptools'
-package 'httpd'
-
-# https://github.com/ryanuber/pakrat
-execute 'easy_install pakrat'
-
-repos = ''
-node['yum']['repos'].each do |name, baseurl|
-  repos += "--name #{name} --baseurl #{baseurl} "
+powershell_script 'Configure Shell Memory' do
+  code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
 end
 
-repos += '--combined ' if node['yum']['combined']
+include_recipe 'wsus-client::configure'
 
-directory '/var/www/html/' do
-  recursive true
-end
-
-execute 'background pakrat repository sync' do
-  cwd '/var/www/html/'
-  command "pakrat #{repos} --repoversion $(date +%Y-%m-%d)"
-  live_stream true
-end
-
-service 'httpd' do
-  action [:start, :enable]
+# Force a scan. This is for demo only, let the timers manage the scans.
+# It make take a day or two to get all your data but it will reduce the
+# load on your WSUS server.
+execute 'Run SUS scan' do
+  command 'c:\\windows\\system32\\UsoClient.exe startscan'
+  action :run
 end

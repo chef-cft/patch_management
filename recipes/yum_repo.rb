@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: patch_management
-# Recipe:: _windows
+# Recipe:: yum_repo
 #
 # Copyright 2016 Chef Software, Inc
 #
@@ -16,23 +16,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-return unless platform_family?('windows')
+# TODO: Look into replacing pakrat with native functionality.
 
-powershell_script 'Configure Shell Memory' do
-  code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
+package 'createrepo'
+package 'python-setuptools'
+package 'httpd'
+
+# https://github.com/ryanuber/pakrat
+execute 'easy_install pakrat'
+
+repos = ''
+node['yum']['repos'].each do |name, baseurl|
+  repos += "--name #{name} --baseurl #{baseurl} "
 end
 
-node.default['wsus_client']['wsus_server'] = 'http://192.168.254.72:8530'
-node.default['wsus_client']['update_group'] = node['patch']['version']
+repos += '--combined ' if node['yum']['combined']
 
-include_recipe 'wsus-client::configure'
-
-reboot 'Restart Computer' do
-  action :nothing
-  only_if { reboot_pending? }
+directory '/var/www/html/' do
+  recursive true
 end
 
-wsus_client_update 'WSUS updates' do
-  action [:download, :install]
-  notifies :reboot_now, 'reboot[Restart Computer]'
+execute 'background pakrat repository sync' do
+  cwd '/var/www/html/'
+  command "pakrat #{repos} --repoversion $(date +%Y-%m-%d)"
+  live_stream true
+end
+
+service 'httpd' do
+  action [:start, :enable]
 end

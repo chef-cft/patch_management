@@ -21,43 +21,14 @@ powershell_script 'Configure Shell Memory' do
   code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
 end.run_action(:run)
 
-node.default['wsus_server']['subscription']['configure_timeout'] = 3600
-node.default['wsus_server']['freeze']['name'] = Date.today.strftime('%Y-%m-%d')
-node.default['wsus_server']['subscription']['categories'] = [
-  'Windows Server 2012 R2'
-]
-node.default['wsus_server']['subscription']['classifications'] = [
-  'All Classifications'
-]
 include_recipe 'wsus-server'
 include_recipe 'wsus-server::freeze'
 
-# [
-#   'NET-WCF-HTTP-Activation45', # This feature is required for KB3159706
-#   'UpdateServices',
-#   'UpdateServices-UI'
-# ].each do |feature_name|
-#   windows_feature feature_name do
-#     action         :install
-#     all            true
-#     provider       :windows_feature_powershell
-#   end
-# end
-#
-# powershell_script 'Set WSUS Products' do
-#   code 'Get-WsusServer | Get-WsusProduct | Where-Object -FilterScript {$_.product.title -Like "Windows Server 2012 R2*"} | Set-WsusProduct'
-# end
-#
-# powershell_script 'Set WSUS Categories' do
-#   code 'Get-WsusClassification | Set-WsusClassification'
-# end
-#
-# # wsus_server_configuration 'WSUS server' do
-# #   update_languages ['en']
-# # end
-#
-# # wsus_server_subscription 'WSUS server' do
-# #   automatic_synchronization true
-# #   categories [ 'Windows Server 2012 R2' ]
-# #   classifications [ 'All Classifications' ]
-# # end
+powershell_script 'Set WSUS App Pool max mem' do
+  guard_interpreter :powershell_script
+  code <<-EOH
+  import-module webadministration
+  Set-WebConfiguration "/system.applicationHost/applicationPools/add[@name='WsusPool']/recycling/periodicRestart/@privateMemory" -Value 4096000
+  EOH
+  not_if "import-module webadministration; if ($(Get-WebConfiguration \"/system.applicationHost/applicationPools/add[@name='WsusPool']/recycling/periodicRestart/@privateMemory\").value -eq 4096000){return $true}"
+end

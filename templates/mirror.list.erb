@@ -4,19 +4,19 @@
 ##
 #
 
-set base_path /var/repo_mirror
+set base_path /var/www/html/ubuntu
 set nthreads 20
+###### Ubuntu Main Repos
+deb http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
+deb-src http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
 
-# 16.04 "xenial" amd64 mirror
-
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial main restricted universe multiverse
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial-proposed main restricted universe multiverse
-deb-amd64 http://vn.archive.ubuntu.com/ubuntu xenial main/debian-installer restricted/debian-installer universe/debian-installer multiverse/debian-installer
-deb-amd64 http://packages.medibuntu.org/ xenial free non-free
-
-# Cleaning section
-clean http://vn.archive.ubuntu.com/
-clean http://packages.medibuntu.org/
+###### Ubuntu Update Repos
+deb http://archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
+deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
+clean http://archive.ubuntu.com/ubuntu

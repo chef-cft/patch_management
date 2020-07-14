@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
+# Cookbook:: patch_management
 # Recipe:: wsus_server
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ include_recipe 'wsus-server'
 include_recipe 'wsus-server::freeze'
 
 powershell_script 'Set WSUS App Pool max mem' do
-  guard_interpreter :powershell_script
   code <<-EOH
   import-module webadministration
   Set-WebConfiguration "/system.applicationHost/applicationPools/add[@name='WsusPool']/recycling/periodicRestart/@privateMemory" -Value 4096000

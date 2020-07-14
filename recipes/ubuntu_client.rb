@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
+# Cookbook:: patch_management
 # Recipe:: ubuntu_client
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,3 +17,18 @@
 # limitations under the License.
 
 return unless platform_family?('debian')
+
+template '/etc/apt/sources.list' do
+  source 'sources.list.erb'
+  action :create
+end
+
+execute 'Refresh package list' do
+  command 'apt update'
+  action :run
+end
+
+execute 'Install any available updates' do
+  command 'apt upgrade -y'
+  action :run
+end

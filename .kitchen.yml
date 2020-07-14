@@ -19,47 +19,49 @@ verifier:
   name: inspec
 
 platforms:
-  - name: win16
+  - name: win19
     driver:
-      image_urn: MicrosoftWindowsServer:WindowsServer:2016-Datacenter:latest
-  - name: ubuntu-1604
+      image_urn: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest
+  - name: ubuntu-1804
     driver:
-      image_urn: Canonical:UbuntuServer:16.04-LTS:latest
+      image_urn: Canonical:UbuntuServer:18.04-LTS:latest
   - name: centos-75
     driver:
       image_urn: OpenLogic:CentOS:7.5:latest
 
 suites:
   - name: apt-repo
-    excludes: win16, centos-75
+    driver:
+      os_disk_size_gb: 300
+    excludes: win19, centos-75
     run_list:
       - recipe[patch_management::apt_repo]
   - name: yum-repo
-    excludes: win16, ubuntu-1604
+    excludes: win19, ubuntu-1804
     run_list:
       - recipe[patch_management::yum_repo]
   - name: wsus
-    excludes: centos-75, ubuntu-1604
+    excludes: centos-75, ubuntu-1804
     run_list:
       - recipe[patch_management::wsus_server]
     driver_config:
       machine_size: "Standard_DS4_v2"
   - name: centos
-    excludes: win16, ubuntu-1604
+    excludes: win19, ubuntu-1804
     run_list:
       - recipe[patch_management::centos_client]
     verifier:
       inspec_tests:
         - https://github.com/dev-sec/linux-patch-benchmark
   - name: ubuntu
-    excludes: win16, centos-75
+    excludes: win19, centos-75
     run_list:
       - recipe[patch_management::ubuntu_client]
     verifier:
       inspec_tests:
         - https://github.com/dev-sec/linux-patch-benchmark
   - name: windows
-    excludes: centos-75, ubuntu-1604
+    excludes: centos-75, ubuntu-1804
     run_list:
       - recipe[patch_management::windows_client]
     verifier:

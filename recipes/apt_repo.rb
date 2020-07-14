@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
+# Cookbook:: patch_management
 # Recipe:: apt_repo
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@
 
 return unless platform_family?('debian')
 
+execute 'Refresh package list' do
+  command 'apt update'
+  action :run
+end
+
 package 'apt-mirror'
 package 'apache2'
 
@@ -26,7 +31,7 @@ template '/etc/apt/mirror.list' do
   action :create
 end
 
-directory '/var/repo_mirror' do
+directory '/var/www/html/ubuntu' do
   owner 'www-data'
   action :create
 end
@@ -41,3 +46,7 @@ end
 # Make sure apache can follow the symlinks
 
 # Edit /etc/cron.d/apt-mirror to schedule automated sync's
+
+service 'apache2' do
+  action [ :enable, :start ]
+end

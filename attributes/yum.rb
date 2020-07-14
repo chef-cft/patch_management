@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
+# Cookbook:: patch_management
 # Attributes:: yum
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,4 +20,4 @@ default['yum']['repos']['centos-base'] = 'http://mirror.centos.org/centos/7/os/x
 default['yum']['repos']['centos-updates'] = 'http://mirror.centos.org/centos/7/updates/x86_64'
 default['yum']['combined'] = false
 
-default['yum']['local_server'] = 'my-yum-repo-server.example.com'
+default['yum']['local_server'] = '104.43.233.144'

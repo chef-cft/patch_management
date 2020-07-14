@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
+# Cookbook:: patch_management
 # Attributes:: wsus_client
 #
-# Copyright 2018 Chef Software, Inc
+# Copyright:: 2018 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ default['wsus_client']['reboot_prompt_timeout']                    = 10
 
 # Define action performed by the update recipe
 # This can be a combination of: nothing, download & install
-default['wsus_client']['update']['action']                        = %i[download install]
+default['wsus_client']['update']['action'] = %i(download install)
 # Time in seconds alloted to the download operation before failing.
 default['wsus_client']['update']['download_timeout']               = 3600
 # Time in seconds alloted to the install operation before failing.

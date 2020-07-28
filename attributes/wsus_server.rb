@@ -20,7 +20,7 @@
 return unless platform?('windows')
 
 # Defines the directory where content is stored, it also enables local storage of wsus content.
-default['wsus_server']['setup']['content_dir'] = 'c:/wsus_content'
+default['wsus_server']['setup']['content_dir'] = 'c:\wsus_content'
 
 # Enables update for the specified list of languages.
 default['wsus_server']['configuration']['update_languages']             = ['en']
@@ -32,7 +32,7 @@ default['wsus_server']['configuration']['properties']['TargetingMode']  = 'Clien
 # Determines whether the WSUS server synchronizes the updates automatically
 default['wsus_server']['subscription']['automatic_synchronization']     = true
 # Defines the list of categories of updates that you want the WSUS server to synchronize. (Id or Title)
-default['wsus_server']['subscription']['categories'] = ['Windows Server 2012 R2', 'Windows Server 2016']
+default['wsus_server']['subscription']['categories'] = ['Windows Server 2019']
 # Defines the list of classifications of updates that you want the WSUS server to synchronize. (Id or Title)
 default['wsus_server']['subscription']['classifications'] = ['Critical Updates', 'Definition Updates', 'Security Updates', 'Service Packs', 'Update Rollups', 'Updates', 'Upgrades']
 # Defines the number of server-to-server synchronizations a day.

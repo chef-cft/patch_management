@@ -20,7 +20,7 @@
 return unless platform?('windows')
 
 # Defines whether a custom WSUS server should be used instead of Microsoft Windows Update server.
-default['wsus_client']['wsus_server']                              = 'http://kitchen-051e26df5045156e.centralus.cloudapp.azure.com:8530'
+default['wsus_client']['wsus_server']                              = 'http://wsus.example.com:8530'
 
 # Defines the current computer update group.
 # => Truthy value also enable client-side update group targeting.
@@ -43,7 +43,7 @@ default['wsus_client']['no_reboot_with_logged_users']              = true
 # => :download  = Download updates, but lets users install them
 # => :install   = Download and install updates
 # => :manual    = Lets the users configure the behavior
-default['wsus_client']['automatic_update_behavior']                = :download
+default['wsus_client']['automatic_update_behavior']                = :install
 
 # Defines times in hours between detection cycles.
 # => 0          = disables custom detection frequency (use Microsoft default value of 22 hours)

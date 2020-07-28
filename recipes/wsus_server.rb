@@ -16,11 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-powershell_script 'Configure Shell Memory' do
-  action :nothing
-  code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
-end.run_action(:run)
-
 include_recipe 'wsus-server'
 include_recipe 'wsus-server::freeze'
 

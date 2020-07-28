@@ -1,6 +1,16 @@
 ---
 driver:
-  name: vagrant
+  name: azurerm
+
+driver_config:
+  # put real subscription_id path in .kitchen.local.yml
+  # subscription_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  location: "Central US"
+  machine_size: "Standard_DS2_v2"
+
+# put real ssh_key path in .kitchen.local.yml
+#transport:
+#  ssh_key: /Users/user/.ssh/id_rsa
 
 provisioner:
   name: chef_zero
@@ -9,46 +19,51 @@ verifier:
   name: inspec
 
 platforms:
-  - name: centos-7.2
-  - name: windows-2012r2
+  - name: win19
     driver:
-      box: opentable/win-2012r2-standard-amd64-nocm
+      image_urn: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest
+  - name: ubuntu-1804
+    driver:
+      image_urn: Canonical:UbuntuServer:18.04-LTS:latest
+  - name: centos-75
+    driver:
+      image_urn: OpenLogic:CentOS:7.5:latest
 
 suites:
-  - name: repo
-    excludes: windows-2012r2
-    run_list:
-      - recipe[patch_management::repo_server]
+  - name: apt-repo
     driver:
-      network:
-        - ['private_network', {ip: '192.168.254.71'}]
+      os_disk_size_gb: 300
+    excludes: win19, centos-75
+    run_list:
+      - recipe[patch_management::apt_repo]
+  - name: yum-repo
+    excludes: win19, ubuntu-1804
+    run_list:
+      - recipe[patch_management::yum_repo]
   - name: wsus
-    excludes: centos-7.2
+    excludes: centos-75, ubuntu-1804
     run_list:
       - recipe[patch_management::wsus_server]
-    driver:
-      network:
-        - ['private_network', {ip: '192.168.254.72'}]
-      customize:
-        memory: 4096
-        cpus: 2
+    driver_config:
+      machine_size: "Standard_DS4_v2"
   - name: centos
-    excludes: windows-2012r2
+    excludes: win19, ubuntu-1804
     run_list:
-      - recipe[patch_management::default]
-    attributes:
-      patch:
-        version: '2016-11-12'
+      - recipe[patch_management::centos_client]
+    verifier:
+      inspec_tests:
+        - https://github.com/dev-sec/linux-patch-benchmark
+  - name: ubuntu
+    excludes: win19, centos-75
+    run_list:
+      - recipe[patch_management::ubuntu_client]
     verifier:
       inspec_tests:
         - https://github.com/dev-sec/linux-patch-benchmark
   - name: windows
-    excludes: centos-7.2
+    excludes: centos-75, ubuntu-1804
     run_list:
-      - recipe[patch_management::default]
-    attributes:
-      patch:
-        version: '2016-11-12'
+      - recipe[patch_management::windows_client]
     verifier:
       inspec_tests:
         - https://github.com/dev-sec/windows-patch-benchmark

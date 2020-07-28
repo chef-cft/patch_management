@@ -1,0 +1,22 @@
+# apt-mirror configuration file
+##
+## The default configuration options (uncomment and change to override)
+##
+#
+
+set base_path /var/www/html/ubuntu
+set nthreads 20
+###### Ubuntu Main Repos
+deb http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
+deb-src http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
+
+###### Ubuntu Update Repos
+deb http://archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+# deb http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
+deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+# deb-src http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
+clean http://archive.ubuntu.com/ubuntu

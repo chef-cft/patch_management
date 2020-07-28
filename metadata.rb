@@ -1,9 +1,8 @@
 name 'patch_management'
 maintainer 'Chef Software, Inc'
 maintainer_email 'success@chef.io'
-license 'apachev2'
-description 'Installs/Configures patch_management'
-long_description 'Installs/Configures patch_management'
+license 'Apache-2.0'
+description 'Sample Patch Management Cookbook'
 version '0.1.1'
 
 depends 'wsus-client'

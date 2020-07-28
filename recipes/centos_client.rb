@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
-# Recipe:: _redhat
+# Cookbook:: patch_management
+# Recipe:: centos_client
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,16 +27,28 @@ end
 
 node['yum']['repos'].each do |name, _|
   yum_repository name do
-    baseurl "http://192.168.254.71/#{name}/#{node['patch']['version']}"
+    baseurl "http://#{node['yum']['local_server']}/#{name}/latest/"
     gpgcheck false
   end
 end
 
-reboot 'Restart Computer' do
-  action :nothing
-  only_if { reboot_pending? } # TODO: This won't actually work on RHEL
-end
+# reboot 'Restart Computer' do
+#   action :nothing
+#   only_if { reboot_pending? } # TODO: This won't actually work on RHEL
+# end
 
-execute 'yum update -y' do
-  notifies :reboot_now, 'reboot[Restart Computer]'
-end
+# execute 'yum update -y' do
+#   #notifies :reboot_now, 'reboot[Restart Computer]'
+# end
+
+# execute 'yum upgrade -y' do
+#   #notifies :reboot_now, 'reboot[Restart Computer]'
+# end
+
+# cron 'Weekly patching maintenance window' do
+#   minute '0'
+#   hour '2'
+#   weekday '7'
+#   command 'yum upgrade -y'
+#   action :create
+# end

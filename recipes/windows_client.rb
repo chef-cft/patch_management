@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: patch_management
-# Recipe:: _windows
+# Cookbook:: patch_management
+# Recipe:: windows_client
 #
-# Copyright 2016 Chef Software, Inc
+# Copyright:: 2016 Chef Software, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,17 +22,12 @@ powershell_script 'Configure Shell Memory' do
   code 'Set-Item WSMan:\localhost\Shell\MaxMemoryPerShellMB 2048'
 end
 
-node.default['wsus_client']['wsus_server'] = 'http://192.168.254.72:8530'
-node.default['wsus_client']['update_group'] = node['patch']['version']
-
 include_recipe 'wsus-client::configure'
 
-reboot 'Restart Computer' do
-  action :nothing
-  only_if { reboot_pending? }
-end
-
-wsus_client_update 'WSUS updates' do
-  action [:download, :install]
-  notifies :reboot_now, 'reboot[Restart Computer]'
+# Force a scan. This is for demo only, let the timers manage the scans.
+# It make take a day or two to get all your data but it will reduce the
+# load on your WSUS server.
+execute 'Run SUS scan' do
+  command 'c:\\windows\\system32\\UsoClient.exe startscan'
+  action :run
 end

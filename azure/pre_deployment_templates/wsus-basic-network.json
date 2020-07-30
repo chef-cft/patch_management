@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "location": {
+          "defaultValue": "",
+          "type": "String"
+      }, 
+      "tags": {
+          "defaultValue": {},
+          "type": "Object"
+      },
+      "vnet_name": {
+          "defaultValue": "",
+          "type": "String"
+      }
+  },
+  "variables": {
+
+  },
+  "resources": [
+      {    
+          "type": "Microsoft.Network/virtualNetworks",
+          "apiVersion": "2020-05-01",
+          "name": "[parameters('vnet_name')]",
+          "location": "[parameters('location')]",
+          "tags": "[parameters('tags')]", 
+          "properties": {
+              "addressSpace": {
+                  "addressPrefixes": [
+                      "10.0.0.0/16"
+                  ]
+              },
+              "subnets": [
+                  {
+                      "name": "Subnet",
+                      "properties": {
+                          "addressPrefix": "10.0.0.0/24",
+                          "delegations": [],
+                          "privateEndpointNetworkPolicies": "Enabled",
+                          "privateLinkServiceNetworkPolicies": "Enabled"
+                      }
+                  }
+              ],
+              "virtualNetworkPeerings": [],
+              "enableDdosProtection": false,
+              "enableVmProtection": false
+            }
+      },
+      {
+          "type": "Microsoft.Network/virtualNetworks/subnets",
+          "apiVersion": "2020-05-01",
+          "name": "[concat(parameters('vnet_name'), '/Subnet')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet_name'))]"
+          ],
+          "properties": {
+              "addressPrefix": "10.0.0.0/24",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+          }
+      }
+  ]
+}

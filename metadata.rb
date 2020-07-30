@@ -7,4 +7,5 @@ version '0.1.1'
 
 depends 'wsus-client'
 depends 'wsus-server'
-depends 'yum'
+depends 'yum' unless platform?('rhel')
+depends 'apt' unless platform?('debian') 

@@ -1,0 +1,58 @@
+---
+driver:
+  name: azurerm 
+
+driver_config:
+  # Override in kitchen.local.yml
+  subscription_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+  # NOTE: This is not the same location as in the Azure pre-deployment parameters.
+  location: "East US 2"
+  machine_size: "Standard_DS2_v2"
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: windows-2019
+    driver:
+      image_urn: MicrosoftWindowsServer:WindowsServer:2019-Datacenter-smalldisk:latest
+      use_ephemeral_osdisk: true
+      resource_group_tags:
+        # Add additional ones in kitchen.local.yml 
+        project: "patch-management"
+      vm_tags:
+        # Add additional ones in kitchen.local.yml 
+        X-Dept: "Success"
+    transport:
+      name: winrm
+
+suites:
+  - name: wsus-server
+    run_list:
+      - recipe[patch_management::wsus_server]
+    driver:
+      # Need to define these because the resource group can't have duplicate resources.
+      vm_name: wsus-server
+      nic_name: wsus-server-nic 
+      public_ip: true
+  - name: wsus-client 
+    run_list:
+      - recipe[patch_management::default]
+    driver:
+      # Need to define these because the resource group can't have duplicate resources.
+      vm_name: wsus-client
+      nic_name: wsus-client-nic
+      # Post setup you will need to create a public NIC if you want to connect to this
+      # host over the Internet. Turning on `public_ip: true` will cause a resource conflict.
+    attributes:
+      patch:
+        version: '2019-06-20'
+      wsus_client:
+        # Based on the Azure pre-deployment template the server will default to 10.0.0.4
+        wsus_server: 'http://10.0.0.4:8530'
+    verifier:
+      inspec_tests:
+        - https://github.com/dev-sec/windows-patch-benchmark

@@ -1,0 +1,18 @@
+---
+driver_config:
+  subscription_id: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+
+driver:
+  pre_deployment_template: ./azure/pre_deployment_templates/wsus-basic-network.json
+  pre_deployment_parameters:
+    location: "eastus2"
+    tags:
+      { "X-Contact": "@StylusEaterChef" }
+    vnet_name: wsus
+  explicit_resource_group_name: success-wsus-demo-001
+  resource_group_tags:
+    contact: "success@chef.io"
+  vm_tags:
+    X-Contact: "@StylusEaterChef"
+  vnet_id: /subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/success-wsus-demo-001/providers/Microsoft.Network/virtualNetworks/wsus
+  subnet_id: Subnet 

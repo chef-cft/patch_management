@@ -1,6 +1,6 @@
 ---
 driver:
-  name: azurerm 
+  name: azurerm
 
 driver_config:
   # Override in kitchen.local.yml
@@ -21,10 +21,10 @@ platforms:
       image_urn: MicrosoftWindowsServer:WindowsServer:2019-Datacenter-smalldisk:latest
       use_ephemeral_osdisk: true
       resource_group_tags:
-        # Add additional ones in kitchen.local.yml 
+        # Add additional ones in kitchen.local.yml
         project: "patch-management"
       vm_tags:
-        # Add additional ones in kitchen.local.yml 
+        # Add additional ones in kitchen.local.yml
         X-Dept: "Success"
     transport:
       name: winrm

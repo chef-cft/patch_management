@@ -1,6 +1,15 @@
 ---
 driver:
   name: azurerm
+  azure_resource_group_prefix: kitchen-<%= ENV['USER'] %>-
+  resource_group_tags: &tags
+    X-Contact: <%= ENV['USER'] %>
+    X-Application: <%= ENV['X_APPLICATION'] %>
+    X-Dept: <%= ENV['X_DEPT'] %>
+    X-Customer: "Test-Kitchen"
+    X-Project: "Test-Kitchen"
+    X-TTL: 6
+  vm_tags: *tags
 
 driver_config:
   # put real subscription_id path in .kitchen.local.yml

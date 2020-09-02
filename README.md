@@ -36,7 +36,7 @@ Now that the gloom and doom warnings are out of the way, let's look at some OS s
 
 #### Linux
 
-Each Linux distribution has it's own repository system. For RHEL based systems, we use [Yum](https://wiki.centos.org/HowTos/CreateLocalMirror), and for Debian based systems, we use [Apt](https://help.ubuntu.com/community/AptGet/Offline/Repository).
+Each Linux distribution has it's own repository system. For RHEL based systems, we use [Yum](https://wiki.centos.org/HowTos/CreateLocalMirror), and for Debian based systems, we use [Apt](https://help.ubuntu.com/community/AptGet/Offline/Repository). You can also use Kernel Care {https://lp.kernelcare.com/kernelcare-and-chef}
 
 > RHEL has some licensing implications for running local repositories. Talk to your Red Hat rep for more info.
 
